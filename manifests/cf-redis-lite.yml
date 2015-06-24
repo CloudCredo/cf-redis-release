@@ -180,6 +180,8 @@ properties:
       dedicated_nodes:
       - 10.244.3.54
       service_instance_limit: 3
+      backend_host: localhost
+      backend_port: 3000
       auth:
         username: admin
         password: admin

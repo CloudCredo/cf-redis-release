@@ -1,3 +1,4 @@
+<% if_p('cf.nats.host') do |_| %>
 ---
 message_bus_servers:
   - host: <%= p('cf.nats.host') %>:<%= p('cf.nats.port') %>
@@ -9,3 +10,4 @@ port: 80
 health_checker:
   name: redis-broker
   interval_in_seconds: 10
+<% end %>

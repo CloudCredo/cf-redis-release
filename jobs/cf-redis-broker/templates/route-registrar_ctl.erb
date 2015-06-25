@@ -20,10 +20,7 @@ start)
   pid_guard $PIDFILE $JOB_NAME
   echo $$ > $PIDFILE
 
-  <% if p('cf.nats.host') !~ /^\s*$/ %>
-    kill -STOP $$
-    return 0
-  <% else %>
+  <% if_p('cf.nats.host') { |_| %>
     # Copy the config file to right folder
     cp /var/vcap/jobs/cf-redis-broker/config/registrar_settings.yml /var/vcap/packages/route-registrar/registrar_settings.yml
 
@@ -31,9 +28,11 @@ start)
     cd /var/vcap/packages/route-registrar
 
     exec chpst -u vcap:vcap /var/vcap/packages/route-registrar/bin/route-registrar \
-      >>$LOG_DIR/route-registrar.stdout.log \
-      2>>$LOG_DIR/route-registrar.stderr.log
-  <% end %>
+    >>$LOG_DIR/route-registrar.stdout.log \
+    2>>$LOG_DIR/route-registrar.stderr.log
+  <% }.else { %>
+    kill -STOP $$
+  <% } %>
 ;;
 
 stop)

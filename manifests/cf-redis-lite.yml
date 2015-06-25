@@ -165,7 +165,7 @@ properties:
     admin_username: admin
     admin_password: admin
     nats:
-      host: 10.244.0.6
+      host:
       port: 4222
       username: nats
       password: nats

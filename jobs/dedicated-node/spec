@@ -122,6 +122,7 @@ properties:
     description: Set the max number of connected clients at the same time
 
   redis.broker.backend_host:
+    default: localhost
     description: The port for the broker unicorn process to run on
   redis.broker.auth.username:
     default: admin

@@ -1,20 +1,24 @@
 ---
 name: cf-redis
 director_uuid: <%= `bosh status --uuid` %>
+
 releases:
 - name: cf-redis
   version: latest
+
 compilation:
   cloud_properties:
     name: random
   network: services
   reuse_compilation_vms: true
   workers: 2
+
 update:
   canaries: 1
   canary_watch_time: 30000-180000
   update_watch_time: 30000-180000
   max_in_flight: 4
+
 networks:
 - name: services
   subnets:
@@ -80,6 +84,7 @@ networks:
     - 10.244.3.69
     static:
     - 10.244.3.70
+
 resource_pools:
 - cloud_properties:
     ram: 1024
@@ -89,6 +94,7 @@ resource_pools:
   stemcell:
     name: bosh-warden-boshlite-ubuntu-trusty-go_agent
     version: latest
+
 jobs:
 - name: dedicated-node
   templates:
@@ -103,91 +109,14 @@ jobs:
   - name: services
     static_ips:
     - 10.244.3.54
-- name: cf-redis-broker
-  templates:
-  - name: cf-redis-broker
-    release: cf-redis
-  - name: syslog-configurator
-    release: cf-redis
-  instances: 1
-  resource_pool: services-small
-  persistent_disk: 4096
-  networks:
-  - name: services
-    static_ips:
-    - 10.244.3.46
-- name: broker-registrar
-  instances: 1
-  lifecycle: errand
-  networks:
-  - name: services
-  resource_pool: services-small
-  templates:
-  - name: broker-registrar
-    release: cf-redis
-  properties:
-    broker:
-      name: redis
-      host: redis-broker.10.244.0.34.xip.io
-      username: admin
-      password: admin
-- name: broker-deregistrar
-  instances: 1
-  lifecycle: errand
-  networks:
-  - name: services
-  resource_pool: services-small
-  templates:
-  - name: broker-deregistrar
-    release: cf-redis
-  properties:
-    broker:
-      name: redis
-      host: redis-broker.10.244.0.34.xip.io
-      username: admin
-      password: admin
-- name: smoke-tests
-  instances: 1
-  lifecycle: errand
-  networks:
-  - name: services
-  resource_pool: services-small
-  templates:
-  - name: smoke-tests
-    release: cf-redis
+
 properties:
   syslog_aggregator:
     address: 127.0.0.1
     port: 1234
-  cf:
-    api_url: http://api.10.244.0.34.xip.io
-    apps_domain: 10.244.0.34.xip.io
-    admin_username: admin
-    admin_password: admin
-    nats:
-      host:
-      port: 4222
-      username: nats
-      password: nats
   redis:
     host: 10.244.3.46
     maxmemory: 262144000
     config_command: config
     save_command: save
     bg_save_command: bgsave
-    broker:
-      network: services
-      dedicated_nodes:
-      - 10.244.3.54
-      service_instance_limit: 3
-      backend_host: localhost
-      backend_port: 3000
-      auth:
-        username: admin
-        password: admin
-      backups:
-        path:
-        access_key_id:
-        secret_access_key:
-        endpoint_url:
-        bucket_name:

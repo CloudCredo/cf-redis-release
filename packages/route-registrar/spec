@@ -1,6 +1,0 @@
----
-name: route-registrar
-dependencies:
-- go
-files:
-- route-registrar/**/*

@@ -5,14 +5,12 @@ templates:
   cf-redis-broker_ctl.erb: bin/cf-redis-broker_ctl
   process-watcher_ctl.erb: bin/process-watcher_ctl
   nginx_ctl.erb: bin/nginx_ctl
-  route-registrar_ctl.erb: bin/route-registrar_ctl
 
   broker.yml.erb: config/broker.yml
   backup.yml.erb: config/backup.yml
   restore.yml.erb: config/restore.yml
   nginx.conf.erb: config/nginx.conf
   redis.conf.erb: config/redis.conf
-  registrar_settings.yml.erb: config/registrar_settings.yml
 
   drain.sh: bin/drain
 
@@ -21,7 +19,6 @@ packages:
 - common
 - nginx
 - redis
-- route-registrar
 - python
 - aws-cli
 
@@ -188,13 +185,3 @@ properties:
   redis.broker.network:
     description: The name of the network that the redis broker runs on.
 
-  cf.apps_domain:
-    description: Domain shared by the UAA and CF API eg '10.244.0.34.xip.io'
-  cf.nats.host:
-    description: Hostname/IP of NATS
-  cf.nats.port:
-    description: Port that NATS listens on
-  cf.nats.username:
-    description: The user to use when authenticating with NATS
-  cf.nats.password:
-    description: The password to use when authenticating with NATS
